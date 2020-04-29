@@ -1,0 +1,9 @@
+C:\projects\DirihleConjGradient\DirihleConjGradient\DirihleConjGradient\bin\Debug\DirihleConjGradient.exe.config
+C:\projects\DirihleConjGradient\DirihleConjGradient\DirihleConjGradient\bin\Debug\DirihleConjGradient.exe
+C:\projects\DirihleConjGradient\DirihleConjGradient\DirihleConjGradient\bin\Debug\DirihleConjGradient.pdb
+C:\projects\DirihleConjGradient\DirihleConjGradient\DirihleConjGradient\obj\Debug\DirihleConjGradient.csprojResolveAssemblyReference.cache
+C:\projects\DirihleConjGradient\DirihleConjGradient\DirihleConjGradient\obj\Debug\DirihleConjGradient.Form1.resources
+C:\projects\DirihleConjGradient\DirihleConjGradient\DirihleConjGradient\obj\Debug\DirihleConjGradient.Properties.Resources.resources
+C:\projects\DirihleConjGradient\DirihleConjGradient\DirihleConjGradient\obj\Debug\DirihleConjGradient.csproj.GenerateResource.Cache
+C:\projects\DirihleConjGradient\DirihleConjGradient\DirihleConjGradient\obj\Debug\DirihleConjGradient.exe
+C:\projects\DirihleConjGradient\DirihleConjGradient\DirihleConjGradient\obj\Debug\DirihleConjGradient.pdb
