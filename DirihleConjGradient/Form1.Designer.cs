@@ -89,6 +89,9 @@
             this.label1 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.SimpleIterButton = new System.Windows.Forms.RadioButton();
+            this.ConjMethodButton = new System.Windows.Forms.RadioButton();
+            this.SimpleIterationParameterLabel = new System.Windows.Forms.Label();
             this.tabControl2.SuspendLayout();
             this.tabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.TableMain)).BeginInit();
@@ -189,6 +192,7 @@
             this.YInterpolationCheckBox.Size = new System.Drawing.Size(15, 14);
             this.YInterpolationCheckBox.TabIndex = 107;
             this.YInterpolationCheckBox.UseVisualStyleBackColor = true;
+            this.YInterpolationCheckBox.CheckedChanged += new System.EventHandler(this.YInterpolationCheckBox_CheckedChanged);
             // 
             // XInterpolationCheckBox
             // 
@@ -198,6 +202,7 @@
             this.XInterpolationCheckBox.Size = new System.Drawing.Size(15, 14);
             this.XInterpolationCheckBox.TabIndex = 106;
             this.XInterpolationCheckBox.UseVisualStyleBackColor = true;
+            this.XInterpolationCheckBox.CheckedChanged += new System.EventHandler(this.XInterpolationCheckBox_CheckedChanged);
             // 
             // ZeroApprocsimationCheckBox
             // 
@@ -207,6 +212,7 @@
             this.ZeroApprocsimationCheckBox.Size = new System.Drawing.Size(15, 14);
             this.ZeroApprocsimationCheckBox.TabIndex = 105;
             this.ZeroApprocsimationCheckBox.UseVisualStyleBackColor = true;
+            this.ZeroApprocsimationCheckBox.CheckedChanged += new System.EventHandler(this.ZeroApprocsimationCheckBox_CheckedChanged);
             // 
             // label20
             // 
@@ -656,11 +662,48 @@
             this.pictureBox2.TabIndex = 118;
             this.pictureBox2.TabStop = false;
             // 
+            // SimpleIterButton
+            // 
+            this.SimpleIterButton.AutoSize = true;
+            this.SimpleIterButton.Location = new System.Drawing.Point(635, 25);
+            this.SimpleIterButton.Name = "SimpleIterButton";
+            this.SimpleIterButton.Size = new System.Drawing.Size(151, 17);
+            this.SimpleIterButton.TabIndex = 119;
+            this.SimpleIterButton.Text = "Метод простой итерации";
+            this.SimpleIterButton.UseVisualStyleBackColor = true;
+            this.SimpleIterButton.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
+            // 
+            // ConjMethodButton
+            // 
+            this.ConjMethodButton.AutoSize = true;
+            this.ConjMethodButton.Checked = true;
+            this.ConjMethodButton.Location = new System.Drawing.Point(635, 48);
+            this.ConjMethodButton.Name = "ConjMethodButton";
+            this.ConjMethodButton.Size = new System.Drawing.Size(190, 17);
+            this.ConjMethodButton.TabIndex = 120;
+            this.ConjMethodButton.TabStop = true;
+            this.ConjMethodButton.Text = "Метод сопряженных градиентов";
+            this.ConjMethodButton.UseVisualStyleBackColor = true;
+            this.ConjMethodButton.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
+            // 
+            // SimpleIterationParameterLabel
+            // 
+            this.SimpleIterationParameterLabel.AutoSize = true;
+            this.SimpleIterationParameterLabel.Location = new System.Drawing.Point(632, 9);
+            this.SimpleIterationParameterLabel.Name = "SimpleIterationParameterLabel";
+            this.SimpleIterationParameterLabel.Size = new System.Drawing.Size(107, 13);
+            this.SimpleIterationParameterLabel.TabIndex = 121;
+            this.SimpleIterationParameterLabel.Text = "Параметер метода:";
+            this.SimpleIterationParameterLabel.Visible = false;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(838, 867);
+            this.Controls.Add(this.SimpleIterationParameterLabel);
+            this.Controls.Add(this.ConjMethodButton);
+            this.Controls.Add(this.SimpleIterButton);
             this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.DotLabelTest);
@@ -710,7 +753,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Name = "Form1";
-            this.Text = "Задача Дирихле для уравнения Пуассона: Метод сопряженных градиентов";
+            this.Text = "Задача Дирихле для уравнения Пуассона";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.tabControl2.ResumeLayout(false);
             this.tabPage4.ResumeLayout(false);
@@ -797,6 +840,9 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.PictureBox pictureBox2;
+        private System.Windows.Forms.RadioButton SimpleIterButton;
+        private System.Windows.Forms.RadioButton ConjMethodButton;
+        private System.Windows.Forms.Label SimpleIterationParameterLabel;
     }
 }
 

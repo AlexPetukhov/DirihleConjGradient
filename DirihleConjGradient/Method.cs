@@ -14,7 +14,7 @@ namespace DirihleConjGradient
         Y_INTERPOLATION
     }
 
-    class Method
+    abstract class Method
     {
 
         public uint N;
@@ -34,7 +34,7 @@ namespace DirihleConjGradient
         public double[,] dataPrev;
         public double[,] function;
         public double[,] residual;
-        public double[,] hvector;
+        
 
         ApproximationType approximationType;
 
@@ -54,13 +54,14 @@ namespace DirihleConjGradient
             Init(Xo, Xn, Yo, Yn, N, M, approximationType);
         }
 
+        public abstract string GetMethodParameter();
+
         public void Init(
             double Xo, double Xn, double Yo, double Yn,
             uint N, uint M, ApproximationType approximationType)
         {
             this.data = new double[N + 1u, M + 1u];
             this.dataPrev = new double[N + 1u, M + 1u];
-            this.hvector = new double[N + 1u, M + 1u];
             this.function = new double[N + 1u, M + 1u];
             this.residual = new double[N + 1, M + 1];
             this.Xo = Xo;
@@ -78,143 +79,13 @@ namespace DirihleConjGradient
             InitMethod();
         }
 
-        public void Run(ref uint maxIter, ref double maxAccuracy)
-        {
-            double accuracy;
-            uint counter = 0u;
+        public abstract void Run(ref uint maxIter, ref double maxAccuracy);
 
-            Approximate();
+        public abstract void Step();
 
-            for (uint i = 0u; i < N + 1; ++i)
-            {
-                for (uint j = 0u; j < M + 1; ++j)
-                {
-                    data[i, j] = V(i, j);
-                    function[i, j] = Function(X(i), Y(j));
-                }
-            }
-            
-            FirstStep();
-            accuracy = 0.0;
-            for (uint j = 1u; j < M; ++j)
-            {
-                for (uint i = 1u; i < N; ++i)
-                {
-                    double prev = dataPrev[i, j];
-                    double cur = data[i, j];
-                    double curAcc = Math.Abs(prev - cur);
-                    accuracy = Math.Max(accuracy, curAcc);
-                }
-            }
-            if ((maxIter > ++counter) && (accuracy >= maxAccuracy)) {
-                do {
-                    accuracy = 0.0;
+        public abstract void FirstStep();
 
-                    Step();
-
-                    for (uint j = 1u; j < M; ++j)
-                    {
-                        for (uint i = 1u; i < N; ++i)
-                        {
-                            double prev = dataPrev[i, j];
-                            double cur = data[i, j];
-                            double curAcc = Math.Abs(prev - cur);
-                            accuracy = Math.Max(accuracy, curAcc);
-                        }
-                    }
-
-                } while ((maxIter > ++counter) && (accuracy >= maxAccuracy));
-            }
-            
-            maxIter = counter;
-            maxAccuracy = accuracy;
-        }
-        public void Step()
-        {
-            residual = AmultB(ref data);
-            double[,] AH = Amult(ref hvector);
-            double betta = scalarnoe(ref AH, ref residual) / scalarnoe(ref AH, ref hvector);
-            for (int i = 0; i <= N; i++) for (int j = 0; j <= M; j++) hvector[i, j] = -residual[i, j] + betta * hvector[i, j];
-
-            AH = Amult(ref hvector);
-            double[,] _res = residual;
-            for (int i = 0; i <= N; i++) for (int j = 0; j <= M; j++) _res[i, j] = -residual[i, j];
-            double alpha = -scalarnoe(ref _res, ref hvector) / scalarnoe(ref AH, ref hvector);
-            
-            for (int i = 0; i <= N; i++) for (int j = 0; j <= M; j++) dataPrev[i, j] = data[i, j];
-            for (int i = 0; i <= N; i++) for (int j = 0; j <= M; j++) data[i, j] = data[i, j] - alpha * hvector[i, j];
-
-        }
-        public void FirstStep()
-        {
-            residual = AmultB(ref data);
-            for (int i = 0; i <= N; i++) for (int j = 0; j <= M; j++) hvector[i, j] = -residual[i, j];
-
-            double[,] AH = Amult(ref hvector);
-            double alpha = -scalarnoe(ref hvector, ref hvector) / scalarnoe(ref AH, ref hvector);
-
-            for (int i = 0; i <= N; i++) for (int j = 0; j <= M; j++) dataPrev[i, j] = data[i, j];
-
-            for (int i = 0; i <= N; i++) for (int j = 0; j <= M; j++) data[i, j] = data[i, j] - alpha * hvector[i, j];
-        }
-
-        public void InitMethod()
-        {
-            residual = AmultB(ref data);
-
-            for (uint i = 1; i < N; ++i)
-            {
-                for (uint j = 1; j < M; ++j)
-                {
-                    hvector[i, j] = residual[i, j];
-                }
-            }
-        }
-
-        public double[,] Amult(ref double[,] vec)
-        {
-            double[,] ans = new double[N + 1, M + 1];
-            for (uint i = 1; i < N; ++i)
-            {
-                for (uint j = 1; j < M; ++j)
-                {
-                    ans[i, j] = a2 * vec[i, j] +
-                                     h2 * (vec[i - 1, j] + vec[i + 1, j]) +
-                                     k2 * (vec[i, j - 1] + vec[i, j + 1]);
-                }
-            }
-            return ans;
-        }
-        public double[,] AmultB(ref double[,] vec)
-        {
-            double[,] ans = new double[N + 1, M + 1];
-            for (uint i = 1; i < N; ++i)
-            {
-                for (uint j = 1; j < M; ++j)
-                {
-                    ans[i, j] = a2 * vec[i, j] +
-                                     h2 * (vec[i - 1, j] + vec[i + 1, j]) +
-                                     k2 * (vec[i, j - 1] + vec[i, j + 1]) +
-                                     function[i, j];
-                }
-            }
-            return ans;
-        }
-
-        public double scalarnoe(ref double[,] v1, ref double[,] v2)
-        {
-            double ans = new double();
-
-            for (uint i = 0; i < N + 1; ++i)
-            {
-                for (uint j = 0; j < M + 1; ++j)
-                {
-                    ans += v1[i, j] * v2[i, j];
-                }
-            }
-
-            return ans;
-        }
+        public abstract void InitMethod();
 
         public double[,] GetExactTable()
         {
@@ -230,6 +101,7 @@ namespace DirihleConjGradient
 
             return exact;
         }
+
         public double CalculateResidual()
         {
             double R = 0.0;
@@ -248,7 +120,8 @@ namespace DirihleConjGradient
 
             return Math.Sqrt(R);
         }
-        private void Approximate()
+
+        protected void Approximate()
         {
             switch (approximationType)
             {

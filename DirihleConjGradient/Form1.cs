@@ -85,14 +85,23 @@ namespace DirihleConjGradient
             uint iterCount = Nmax;
             uint maxI = 0u;
             uint maxJ = 0u;
+            Method task;
 
-            Method task = new Method();
+            if (SimpleIterButton.Checked == true)
+            {
+                task = new SimpleIteration();
+            } else
+            {
+                task = new ConjGradient();
+            }
             
 
             task.Init(Xo, Xn, Yo, Yn, N, M, approximationType);
             task.SetFunctions(mu1Test, mu2Test, mu3Test, mu4Test, FunctionTest, ExactFunction);
 
             task.Run(ref iterCount, ref maxAcc);
+
+            SimpleIterationParameterLabel.Text = "Параметр метода: " + task.GetMethodParameter();
 
 
             FindMax(
@@ -176,12 +185,24 @@ namespace DirihleConjGradient
             uint maxJ = 0u;
 
 
-            Method main = new Method();
-            Method half = new Method();
+            Method main, half;
+
+            if (SimpleIterButton.Checked == true)
+            {
+                main = new SimpleIteration();
+                half = new SimpleIteration();
+            }
+            else
+            {
+                main = new ConjGradient();
+                half = new ConjGradient();
+            }
 
             main.Init(Xo, Xn, Yo, Yn, N, M, approximationType);
             main.SetFunctions(mu1Main, mu2Main, mu3Main, mu4Main, FunctionMain);
             main.Run(ref IterMain, ref maxAccMain);
+
+            SimpleIterationParameterLabel.Text = "Параметр метода: " + main.GetMethodParameter();
 
             half.Init(Xo, Xn, Yo, Yn, N * 2u, M * 2u, approximationType);
             half.SetFunctions(mu1Main, mu2Main, mu3Main, mu4Main, FunctionMain);
@@ -251,6 +272,7 @@ namespace DirihleConjGradient
         {
 
         }
+
         private double[,] CalculateDifferenceTableForMainTask(
             double[,] wholeStep, double[,] halfStep, uint _N, uint _M)
         {
@@ -272,6 +294,60 @@ namespace DirihleConjGradient
 
         private void Form1_Load(object sender, EventArgs e)
         {
+
+        }
+
+        private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (SimpleIterButton.Checked == true)
+            {
+                SimpleIterButton.Checked = true;
+                ConjMethodButton.Checked = false;
+                SimpleIterationParameterLabel.Visible = true;
+            }
+        }
+
+        private void radioButton2_CheckedChanged(object sender, EventArgs e)
+        {
+            if (ConjMethodButton.Checked == true)
+            {
+                SimpleIterButton.Checked = false;
+                ConjMethodButton.Checked = true;
+                SimpleIterationParameterLabel.Visible = false;
+            }
+        }
+
+        private void XInterpolationCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (XInterpolationCheckBox.Checked == true)
+            {
+                approximationType = ApproximationType.X_INTERPOLATION;
+                XInterpolationCheckBox.Checked = true;
+                YInterpolationCheckBox.Checked = false;
+                ZeroApprocsimationCheckBox.Checked = false;
+            }
+        }
+
+        private void ZeroApprocsimationCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (ZeroApprocsimationCheckBox.Checked == true)
+            {
+                approximationType = ApproximationType.ZERO_APPROXIMATION;
+                XInterpolationCheckBox.Checked = false;
+                YInterpolationCheckBox.Checked = false;
+                ZeroApprocsimationCheckBox.Checked = true;
+            }
+        }
+
+        private void YInterpolationCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (YInterpolationCheckBox.Checked == true)
+            {
+                approximationType = ApproximationType.Y_INTERPOLATION;
+                XInterpolationCheckBox.Checked = false;
+                YInterpolationCheckBox.Checked = true;
+                ZeroApprocsimationCheckBox.Checked = false;
+            }
 
         }
     }
